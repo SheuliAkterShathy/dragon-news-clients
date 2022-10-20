@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Image } from 'react-bootstrap';
+import { Button, Image } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -10,7 +10,13 @@ import { AuthContext } from '../../../contexts/AuthProvider/AuthProvider';
 import LeftSideNav from '../LeftSideNav/LeftSideNav';
 
 const Header = () => {
-const {user} = useContext(AuthContext);
+const {user,logOut} = useContext(AuthContext);
+
+const handleLogOut = () =>{
+  logOut()
+  .then(()=>{})
+  .catch(error=>console.error(error))
+}
 
     return (
         <Navbar className='mb-4' collapseOnSelect expand="lg" bg="light" variant="light">
@@ -34,7 +40,21 @@ const {user} = useContext(AuthContext);
               </NavDropdown>
             </Nav>
             <Nav>
-              <Nav.Link href="#deets">{user?.displayName}</Nav.Link>
+              <Nav.Link href="#deets">
+                {
+                  user?.uid?
+                  <>
+                  <span>{user?.displayName}</span>
+                  <Button className='ms-2' variant='light' onClick={handleLogOut}>Log Out</Button>
+                  </>
+                  :
+                  <>
+                  <Button className='me-2' variant='info'><Link to='/login'>Log In</Link></Button>
+                  <Button variant='info'><Link to='/register'>Register</Link></Button>
+                  </>
+                }
+                
+              </Nav.Link>
               <Nav.Link eventKey={2} href="#memes">
                {
                 user?.photoURL?
